@@ -1,5 +1,5 @@
 :root {
-  --bg-color-ngreen: limegreen;
+  --bg-color-ngreen: rgb(143, 143, 143);
 }
 body,
 html,
@@ -16,15 +16,34 @@ h5 {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  justify-content: center;
   align-items: center;
+  background-color: rgb(50, 50, 50);
+  color: aliceblue;
+  height: 100vh;
 }
 
 table {
   width: 30rem;
-  border: 1px solid black;
+  /* border: 1px solid rgb(255, 255, 255); */
+}
+th,
+td {
+  padding: 0.3rem;
 }
 
 thead {
   background-color: var(--bg-color-ngreen);
+}
+tbody tr:nth-child(even) {
+  background-color: rgb(70, 160, 104);
+}
+tbody tr:nth-child(odd) {
+  background-color: rgba(70, 160, 104, 0.49);
+}
+a:visited {
+  color: aqua;
+}
+
+.searchbar input {
+  width: 25rem;
 }
