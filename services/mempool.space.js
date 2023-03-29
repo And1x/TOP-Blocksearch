@@ -1,7 +1,5 @@
 const hostname = "https://mempool.space";
 
-// fetch it baby
-
 export async function getCurrentBlockHeight() {
   let url = `${hostname}/api/blocks/tip/height`;
   try {
