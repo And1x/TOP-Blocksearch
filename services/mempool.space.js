@@ -39,3 +39,13 @@ export async function getBlockHashByHeigth(height) {
     console.log(error);
   }
 }
+
+export async function getTxByTxid(txid) {
+  let url = `${hostname}/api/tx/${txid}`;
+  try {
+    let res = await fetch(url);
+    return await res.json();
+  } catch (error) {
+    console.log(error);
+  }
+}

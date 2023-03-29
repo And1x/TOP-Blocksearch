@@ -2,6 +2,7 @@ import {
   getCurrentBlockHeight,
   getBlockByHeight,
   getBlockByHash,
+  getTxByTxid,
   getBlockHashByHeigth,
 } from "./services/mempool.space.js";
 
@@ -20,17 +21,8 @@ const isHexadecimal = (str) => /^[A-F0-9]+$/i.test(str);
 searchBtnEl.addEventListener("click", (e) => {
   e.preventDefault();
   let searchInput = searchEl.value;
-  // todo: filter if input is blockheight, block-id and evtl. txid
-  searchInputSwitch(searchInput);
 
-  // if (!isNaN(searchInput) && searchInput <= currentBlockHeight) {
-  //   getBlockByHeight(Number(searchInput)).then(function (res) {
-  //     removeBlockInfoTable();
-  //     containerEl.appendChild(createBlockInfoTable(res));
-  //   });
-  // } else {
-  //   console.log("wrong input yoo");
-  // }
+  searchInputSwitch(searchInput);
 });
 
 // ####################
@@ -47,20 +39,30 @@ getCurrentBlockHeight().then(function (height) {
 });
 
 // note: see n1 in README
+// todo: rewrite to async/await - to be able to write nested catch in case
+// no block by hash gets found
+// -- error from first request did not get catched!!!!!
 function searchInputSwitch(searchInput) {
   if (isHexadecimal(searchInput) && searchInput.length === 64) {
     // find block by Hash -> if no result use hash to search TX
-    getBlockByHash(searchInput).then(function (block) {
-      removeBlockInfoTable();
-      containerEl.appendChild(createBlockInfoTable(block));
-    });
+    getBlockByHash(searchInput)
+      .then(function (block) {
+        removeBlockInfoTable();
+        containerEl.appendChild(createBlockInfoTable(block));
+      })
+      .catch(
+        // console.log("couldn't find Block by given hash - try as TXID"),
+        getTxByTxid(searchInput).then(function (tx) {
+          console.log(tx);
+        })
+      );
   } else if (
     Number(searchInput) <= Number(currentBlockHeight) &&
     Number(searchInput) >= 0
   ) {
-    getBlockByHeight(Number(searchInput)).then(function (heigth) {
+    getBlockByHeight(Number(searchInput)).then(function (height) {
       removeBlockInfoTable();
-      containerEl.appendChild(createBlockInfoTable(heigth));
+      containerEl.appendChild(createBlockInfoTable(height));
     });
   }
 }
